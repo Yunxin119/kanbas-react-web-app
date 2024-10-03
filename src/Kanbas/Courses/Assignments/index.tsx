@@ -1,40 +1,71 @@
+import AssignmentButtons from "./AssignmentButtons";
+import AssignmentControls from "./AssignmentControls";
+import { BsGripVertical } from "react-icons/bs";
+import { Link } from "react-router-dom";
+import SingleAssignmentButtons from "./SingleAssignmentButtons";
+import SingleAssignmentButtonsBefore from "./SingleAssignmentButtonsBefore";
+
 export default function Assignments() {
     return (
-      <div id="wd-assignments">
-        <input id="wd-search-assignment"
-               placeholder="Search for Assignments" />
-        <button id="wd-add-assignment-group">+ Group</button>
-        <button id="wd-add-assignment">+ Assignment</button>
-        <h3 id="wd-assignments-title">
-          ASSIGNMENTS 40% of Total <button>+</button>
-        </h3>
-        <ul id="wd-assignment-list">
-          <li className="wd-assignment-list-item">
-            <a className="wd-assignment-link"
-              href="#/Kanbas/Courses/1234/Assignments/123">
-              A1 - ENV + HTML
-            </a><br />
-            <span className="wd-assignment-description">Multiple Modules | <b>Not available until</b> May 6 at 12:00am |</span><br/>
-            <span className="wd-assignment-due"><b>Due</b> May 13 at 11:59pm | 100 pts</span>
+      <ul id="wd-assignments" className="list-group rounded-0">
+        <AssignmentButtons />
+        <li className="wd-assignment list-group-item p-0 mb-5 fs-5 border-gray">
+          <div id="wd-assignment-title" className="p-3 ps-2 bg-secondary">
+            <b>ASSIGNMENTS</b>
+            <AssignmentControls />
+          </div>
+          <ul id="wd-assignment-list" className="list-group">
+            
+          <li className="wd-assignment-list-item list-group-item d-flex justify-content-between align-items-center">
+            <div className="d-flex justify-content-center" style={{ marginRight: '10px' }}>
+              <SingleAssignmentButtonsBefore />
+            </div>
+            <div className="flex-grow-1">
+              <Link className="wd-assignment-link text-dark"
+                to="123">
+                <b>A1 - ENV + HTML</b>
+              </Link><br />
+              <SingleAssignmentButtons />
+              <span className="wd-assignment-description text-secondary">
+                <span className="text-danger">Multiple Modules</span> | <b>Not available until</b> May 6 at 12:00am |
+              </span><br />
+              <span className="wd-assignment-due text-secondary"><b>Due</b> May 13 at 11:59pm | 100 pts</span>
+            </div>
           </li>
-          <li className="wd-assignment-list-item">
-            {/* Complete On Your Own */}
-            <a className="wd-assignment-link"
-              href="#/Kanbas/Courses/1234/Assignments/124">
-              A2 - CSS + BOOTSTRAP
-            </a><br />
-            <span className="wd-assignment-description">Multiple Modules | <b>Not available until</b> May 13 at 12:00am |</span><br/>
-            <span className="wd-assignment-due"><b>Due</b> May 20 at 11:59pm | 100 pts</span>
-          </li>
-          <li className="wd-assignment-list-item">
-            <a className="wd-assignment-link"
-              href="#/Kanbas/Courses/1234/Assignments/125">
-              A3 - JAVASCRIPT + REACT
-            </a><br />
-            <span className="wd-assignment-description">Multiple Modules | <b>Not available until</b> May 20 at 12:00am |</span><br/>
-            <span className="wd-assignment-due"><b>Due</b> May 27 at 11:59pm | 100 pts</span>
-          </li>
-        </ul>
-      </div>
+
+            <li className="wd-assignment-list-item list-group-item d-flex justify-content-between align-items-center">
+            <div className="d-flex justify-content-center" style={{ marginRight: '10px' }}>
+              <SingleAssignmentButtonsBefore />
+            </div>
+            <div className="flex-grow-1">
+              <Link className="wd-assignment-link text-dark"
+                to="124">
+                <b>A2 - CSS + BOOTSTRAP</b>
+              </Link><br />
+              <SingleAssignmentButtons />
+              <span className="wd-assignment-description text-secondary"><span className="text-danger">Multiple Modules</span> | <b>Not available until</b> May 13 at 12:00am |</span><br/>
+              <span className="wd-assignment-due text-secondary"><b>Due</b> May 20 at 11:59pm | 100 pts</span>
+            </div>
+            </li>
+
+            <li className="wd-assignment-list-item list-group-item d-flex justify-content-between align-items-center">
+              <div className="d-flex justify-content-center" style={{ marginRight: '10px' }}>
+                <SingleAssignmentButtonsBefore />
+              </div>
+              <div className="flex-grow-1">
+              <Link className="wd-assignment-link text-dark"
+                to="125">
+                <b>A3 - JAVASCRIPT + REACT</b>
+              </Link>
+              <br />
+              <SingleAssignmentButtons />
+              <span className="wd-assignment-description text-secondary"><span className="text-danger">Multiple Modules</span> | <b>Not available until</b> May 20 at 12:00am |</span><br/>
+              <span className="wd-assignment-due text-secondary"><b>Due</b> May 27 at 11:59pm | 100 pts</span>
+              </div>
+            </li>
+          </ul>
+
+        </li>
+      </ul>
   );}
   
