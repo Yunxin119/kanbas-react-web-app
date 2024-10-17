@@ -1,23 +1,30 @@
 import { FaCalendar } from "react-icons/fa";
+import { useParams } from "react-router-dom";
+import { assignments } from "../../Database";
+import { Link } from "react-router-dom";
 
 export default function AssignmentEditor() {
+  const { aid } = useParams();
+  const assignment = assignments.find((assignment) => assignment._id === aid);
+  const duedate = assignment ? new Date(assignment.due) : null;
+  const availablefrom = assignment ? new Date(assignment.available) : null;
     return (
       <div id="wd-assignments-editor">
         <form>
         {/* Name Edit */}
         <div className="row mb-3">
           <label htmlFor="wd-name" className="col-sm-2 col-form-label">Assignment Name</label>
-          <input id="wd-name" value="A1 - ENV + HTML" className="form-control"/>
+          <input id="wd-name" value={assignment && assignment.title} className="form-control"/>
         </div>
         {/* Description */}
         <div className="row mb-3">
-          <textarea id="wd-description" className="form-control" rows={10}/>
+          <textarea id="wd-description" value={assignment&&assignment.description} className="form-control" rows={10}/>
         </div>
         {/* Points */}
         <div className="row mb-3 col-sm-12 float-end">
           <label htmlFor="wd-points" className="col-sm-2 col-form-label d-flex justify-content-end">Points</label>
           <div className="col-sm-10">
-            <input id="wd-points" value={100} className="form-control"/>
+            <input id="wd-points" value={assignment&&assignment.points} className="form-control"/>
           </div>
         </div>
         {/* Group */}
@@ -31,7 +38,7 @@ export default function AssignmentEditor() {
         </div>
         {/* Display Grade As */}
         <div className="row mb-3 col-sm-12 float-end">
-          <label htmlFor="wd-display-grade-as" className="col-sm-2 col-form-label d-flex justify-content-end">Assignment Group</label>
+          <label htmlFor="wd-display-grade-as" className="col-sm-2 col-form-label d-flex justify-content-end">Display Grade as</label>
           <div className="col-sm-10">
             <select id="wd-display-grade-as" className="form-select">
                 <option value='percentage'>Percentage</option>
@@ -95,20 +102,23 @@ export default function AssignmentEditor() {
               <div className="mb-4">
                 <label htmlFor="wd-due" className="form-label"><b>Due</b></label>
                 <div className="input-group">
-                  <input type="date" value="2024-05-13" className="form-control"/>
+                  <input type="text" value={assignment && assignment.due} className="form-control"/>
+                  <span className="input-group-text"><FaCalendar/></span>
               </div>
               </div>
               <div className="row">
                 <div className="col-sm-6">
                   <label htmlFor="wd-available-from" className="form-label"><b>Available From</b></label>
                   <div className="input-group">
-                    <input type="date" id="wd-available-from" value="2024-05-06" className="form-control"/>
+                    <input type="text" id="wd-available-from" value={assignment?.available} className="form-control"/>
+                    <span className="input-group-text"><FaCalendar/></span>
                   </div>
                 </div>
                 <div className="col-sm-6">
                   <label htmlFor="wd-available-until" className="form-label"><b>Until</b></label>
                   <div className="input-group">
-                    <input type="date" id="wd-available-until" value="2024-05-20" className="form-control"/>
+                    <input type="text" id="wd-available-until" value={assignment?.due} className="form-control"/>
+                    <span className="input-group-text"><FaCalendar/></span>
                   </div>
                 </div>
               </div>
@@ -118,9 +128,8 @@ export default function AssignmentEditor() {
         </div>
         <div className="row float-end">
           <div className="d-flex justify-item-end gap-2">
-          <button id="wd-cancel" className="btn btn-lg btn-secondary border border-1 border-dark">Cancel</button>
-            <button id="wd-save" className="btn btn-lg btn-danger">Save</button>
-            
+            <Link to={`/Kanbas/Courses/${assignment?.course}/Assignments`} id="wd-cancel" className="btn btn-lg btn-secondary border border-1 border-dark">Cancel</Link>
+            <Link to={`/Kanbas/Courses/${assignment?.course}/Assignments`} id="wd-save" className="btn btn-lg btn-danger">Save</Link>
           </div>
         </div>
 

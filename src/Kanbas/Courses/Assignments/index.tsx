@@ -1,11 +1,15 @@
 import AssignmentButtons from "./AssignmentButtons";
 import AssignmentControls from "./AssignmentControls";
 import { BsGripVertical } from "react-icons/bs";
+import { useParams } from "react-router";
+import * as db from "../../Database";
 import { Link } from "react-router-dom";
 import SingleAssignmentButtons from "./SingleAssignmentButtons";
 import SingleAssignmentButtonsBefore from "./SingleAssignmentButtonsBefore";
 
 export default function Assignments() {
+  const { cid } = useParams();
+  const assignments = db.assignments;
     return (
       <ul id="wd-assignments" className="list-group rounded-0">
         <AssignmentButtons />
@@ -15,54 +19,25 @@ export default function Assignments() {
             <AssignmentControls />
           </div>
           <ul id="wd-assignment-list" className="list-group">
+            {assignments.filter((assignment) => assignment.course === cid).map((assignment : any) => (
+              <li className="wd-assignment-list-item list-group-item d-flex justify-content-between align-items-center">
+                <div className="d-flex justify-content-center" style={{ marginRight: '10px' }}>
+                  <SingleAssignmentButtonsBefore />
+                </div>
+                <div className="flex-grow-1">
+                  <Link className="wd-assignment-link text-dark"
+                    to={assignment._id}>
+                    <b>{assignment.title}</b>
+                  </Link><br />
+                  <SingleAssignmentButtons />
+                  <span className="wd-assignment-description text-secondary">
+                    <span className="text-danger">Multiple Modules</span> | <b>Not available until</b> {assignment.available.split(',')[0]} at {assignment.available.split(',')[2]} |
+                  </span><br />
+                  <span className="wd-assignment-due text-secondary"><b>Due</b> {assignment.due.split(',')[0]} at {assignment.due.split(',')[2]} | {assignment.points} pts</span>
+                </div>
+              </li>
+            ))}
             
-          <li className="wd-assignment-list-item list-group-item d-flex justify-content-between align-items-center">
-            <div className="d-flex justify-content-center" style={{ marginRight: '10px' }}>
-              <SingleAssignmentButtonsBefore />
-            </div>
-            <div className="flex-grow-1">
-              <Link className="wd-assignment-link text-dark"
-                to="123">
-                <b>A1 - ENV + HTML</b>
-              </Link><br />
-              <SingleAssignmentButtons />
-              <span className="wd-assignment-description text-secondary">
-                <span className="text-danger">Multiple Modules</span> | <b>Not available until</b> May 6 at 12:00am |
-              </span><br />
-              <span className="wd-assignment-due text-secondary"><b>Due</b> May 13 at 11:59pm | 100 pts</span>
-            </div>
-          </li>
-
-            <li className="wd-assignment-list-item list-group-item d-flex justify-content-between align-items-center">
-            <div className="d-flex justify-content-center" style={{ marginRight: '10px' }}>
-              <SingleAssignmentButtonsBefore />
-            </div>
-            <div className="flex-grow-1">
-              <Link className="wd-assignment-link text-dark"
-                to="124">
-                <b>A2 - CSS + BOOTSTRAP</b>
-              </Link><br />
-              <SingleAssignmentButtons />
-              <span className="wd-assignment-description text-secondary"><span className="text-danger">Multiple Modules</span> | <b>Not available until</b> May 13 at 12:00am |</span><br/>
-              <span className="wd-assignment-due text-secondary"><b>Due</b> May 20 at 11:59pm | 100 pts</span>
-            </div>
-            </li>
-
-            <li className="wd-assignment-list-item list-group-item d-flex justify-content-between align-items-center">
-              <div className="d-flex justify-content-center" style={{ marginRight: '10px' }}>
-                <SingleAssignmentButtonsBefore />
-              </div>
-              <div className="flex-grow-1">
-              <Link className="wd-assignment-link text-dark"
-                to="125">
-                <b>A3 - JAVASCRIPT + REACT</b>
-              </Link>
-              <br />
-              <SingleAssignmentButtons />
-              <span className="wd-assignment-description text-secondary"><span className="text-danger">Multiple Modules</span> | <b>Not available until</b> May 20 at 12:00am |</span><br/>
-              <span className="wd-assignment-due text-secondary"><b>Due</b> May 27 at 11:59pm | 100 pts</span>
-              </div>
-            </li>
           </ul>
 
         </li>
