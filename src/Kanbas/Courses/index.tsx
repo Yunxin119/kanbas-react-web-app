@@ -8,12 +8,14 @@ import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
 import { FaAlignJustify } from "react-icons/fa";
 import PeopleTable from "./People/Table";
+import { useSelector } from "react-redux";
 
-
-export default function Courses() {
+export default function Courses({courses}: {courses: any[]}) {
     const { cid } = useParams();
     const course = courses.find((course) => course._id === cid);
     const { pathname } = useLocation();
+    const { currentUser } = useSelector((state: any) => state.accountReducer);
+    const isFaculty = currentUser.role === "FACULTY";
 
     return (
     <div id="wd-courses">
@@ -27,9 +29,9 @@ export default function Courses() {
             </div>
             <div className="flex-fill">
             <Routes>
-            <Route path="Home" element={<Home />} />
-            <Route path="Modules" element={<Modules />} />
-            <Route path="Assignments" element={<Assignments />} />
+            <Route path="Home" element={<Home isFaculty = {isFaculty} />} />
+            <Route path="Modules" element={<Modules isFaculty = {isFaculty} />} />
+            <Route path="Assignments" element={<Assignments isFaculty={isFaculty} />} />
             <Route path="Assignments/:aid" element={<AssignmentEditor />} />
             <Route path="People" element = {<PeopleTable />} />
             </Routes>
