@@ -21,7 +21,7 @@ const AssignmentButtons = ({ isFaculty }: { isFaculty: boolean; }) => {
                 id="wd-add-assignment"
                 className="btn btn-lg btn-danger text-white me-1 float-end"
                 onClick={() => {
-                  const newId = `A${assignments.length + 1}`;
+                  const newId = `A${new Date().getTime()}`;
                   navigate(`/Kanbas/Courses/${cid}/Assignments/${newId}`);
                 }}
               >

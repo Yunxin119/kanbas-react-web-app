@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import{ useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addAssignment, updateAssignment } from "./reducer";
+import * as coursesClient from "../client";
+import * as assignmentsClient from "./client";
 
 export default function AssignmentEditor() {
   const { aid, cid } = useParams();
@@ -18,23 +20,44 @@ export default function AssignmentEditor() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSave = () => {
-    const updatedAssignment = {
-      ...assignment,
-      _id: aid,
-      points,
+  const createAssignmentForCourse = async () => {
+    if (!cid) return;
+    const newAssignment = {
       title: name,
       description,
-      due: due.toLocaleString("en-US", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: true }),
-      availableFrom: availableFrom.toLocaleString("en-US", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: true }),
-      availableUntil: availableUntil.toLocaleString("en-US", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: true }),
-      course: cid
-    }
+      points,
+      due: due.toISOString(),
+      availableFrom: availableFrom.toISOString(),
+      availableUntil: availableUntil.toISOString(),
+      course: cid,
+      _id: aid
+    };
+  
+    const assignment = await coursesClient.createAssignmentForCourse(cid, newAssignment);
+    dispatch(addAssignment(assignment));
+  };
 
+  const saveAssignment = async (assignment: any) => {
+    if (!cid) return;
+    await assignmentsClient.updateAssignment(assignment);
+    dispatch(updateAssignment(assignment));
+  };
+
+  const handleSave = () => {
     if (assignment) {
-      dispatch(updateAssignment(updatedAssignment));
+      const updatedAssignment = {
+        ...assignment,
+        points,
+        title: name,
+        description,
+        due: due.toLocaleString("en-US", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: true }),
+        availableFrom: availableFrom.toLocaleString("en-US", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: true }),
+        availableUntil: availableUntil.toLocaleString("en-US", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: true }),
+        course: cid
+      }
+      saveAssignment(updatedAssignment);
     } else {
-      dispatch(addAssignment(updatedAssignment));
+      createAssignmentForCourse();
     }
 
     navigate(`/Kanbas/Courses/${cid}/Assignments`);
@@ -46,14 +69,14 @@ export default function AssignmentEditor() {
         {/* Name Edit */}
         <div className="row mb-3">
           <label htmlFor="wd-name" className="col-sm-2 col-form-label">Assignment Name</label>
-          <input id="wd-name" value={assignment && assignment.title} 
+          <input id="wd-name" value={name} 
             onChange={(e) => setName(e.target.value)} 
             className="form-control"
           />
         </div>
         {/* Description */}
         <div className="row mb-3">
-          <textarea id="wd-description" value={assignment&&assignment.description} 
+          <textarea id="wd-description" value={description} 
           onChange={(e) => setDescription(e.target.value)}
           className="form-control" rows={10}
           />
@@ -62,7 +85,7 @@ export default function AssignmentEditor() {
         <div className="row mb-3 col-sm-12 float-end">
           <label htmlFor="wd-points" className="col-sm-2 col-form-label d-flex justify-content-end">Points</label>
           <div className="col-sm-10">
-            <input id="wd-points" value={assignment&&assignment.points} 
+            <input id="wd-points" value={points} type="number"
             onChange={(e) => setPoints(parseInt(e.target.value))}
             className="form-control"/>
           </div>

@@ -7,8 +7,10 @@ import { Link } from "react-router-dom";
 import SingleAssignmentButtons from "./SingleAssignmentButtons";
 import SingleAssignmentButtonsBefore from "./SingleAssignmentButtonsBefore";
 import { useSelector, useDispatch } from "react-redux";
-import { addAssignment, editAssignment, deleteAssignment, updateAssignment } from "./reducer";
-import { useState } from 'react';
+import { setAssignments, addAssignment, editAssignment, deleteAssignment, updateAssignment } from "./reducer";
+import { useState, useEffect } from 'react';
+import * as coursesClient from "../client";
+import * as assignmentsClient from "./client";
 
 export default function Assignments( { isFaculty }: { isFaculty: boolean }) {
   const { cid } = useParams();
@@ -18,6 +20,18 @@ export default function Assignments( { isFaculty }: { isFaculty: boolean }) {
   const [assignmentDueDate, setAssignmentDueDate] = useState(new Date());
   const [assignmentPoints, setAssignmentPoints] = useState(100);
   const [assignmentAvailableFrom, setAssignmentAvailableFrom] = useState(new Date());
+  const fetchAssignments = async () => {
+    const assignments = await coursesClient.findAssignmentsForCourse(cid as string);
+    dispatch(setAssignments(assignments));
+  };
+  useEffect(() => {
+    fetchAssignments();
+  }, []);
+  const removeAssignment = async (assignmentId: string) => {
+    console.log("Removing assignment with ID:", assignmentId); 
+    await assignmentsClient.deleteAssignment(assignmentId);
+    dispatch(deleteAssignment(assignmentId));
+  };
 
     return (
       <ul id="wd-assignments" className="list-group rounded-0">
@@ -30,8 +44,8 @@ export default function Assignments( { isFaculty }: { isFaculty: boolean }) {
             <AssignmentControls isFaculty={isFaculty} />
           </div>
           <ul id="wd-assignment-list" className="list-group">
-            {assignments.filter((assignment : any) => assignment.course === cid).map((assignment : any) => (
-              <li className="wd-assignment-list-item list-group-item d-flex justify-content-between align-items-center">
+            {assignments.map((assignment : any) => (
+              <li key={assignment._id} className="wd-assignment-list-item list-group-item d-flex justify-content-between align-items-center">
                 <div className="d-flex justify-content-center" style={{ marginRight: '10px' }}>
                   <SingleAssignmentButtonsBefore />
                 </div>
@@ -47,9 +61,9 @@ export default function Assignments( { isFaculty }: { isFaculty: boolean }) {
 
                   { isFaculty &&  
                     <SingleAssignmentButtons 
-                      assignmentId={assignment._id}
-                      deleteAssignment={() => {dispatch(deleteAssignment(assignment._id))}}
-                    />}
+                    assignmentId={assignment._id}
+                    deleteAssignment={(assignmentId) => removeAssignment(assignmentId)}
+                  />}
                   <span className="wd-assignment-description text-secondary">
                     <span className="text-danger">Multiple Modules</span> | 
                     <b>Not available until</b> {assignment.availableFrom || 'N/A'} |

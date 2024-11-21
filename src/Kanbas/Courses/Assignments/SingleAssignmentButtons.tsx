@@ -12,13 +12,27 @@ const SingleAssignmentButtons = (
     deleteAssignment: (assignmentId: string) => void;
   }
 ) => {
+  const handleDelete = () => {
+    const confirm = window.confirm("Are you sure you want to delete this assignment? This action cannot be undone.");
+    if (!confirm) {
+      return;
+    }
+    deleteAssignment(assignmentId);
+  }
   return (
     <div className='float-end'>
-      <FaTrash className="fs-5 text-danger me-2 mb-1" data-bs-toggle="modal" data-bs-target="#wd-delete-dialog"/>
+      <FaTrash className="fs-5 text-danger me-2 mb-1" 
+      onClick={handleDelete}
+      // data-bs-toggle="modal" data-bs-target="#wd-delete-dialog"
+      />
       <GreenCheckmark />
       <IoEllipsisVertical className="fs-4" />
       
-      <DeleteComfirm dialogTitle="Delete Assignment" deleteAssignment={() => deleteAssignment(assignmentId)} />
+      {/* <DeleteComfirm dialogTitle="Delete Assignment" deleteAssignment={
+        () => {
+          console.log("deletingAssignment:", deleteAssignmentId);
+          deleteAssignment(deleteAssignmentId);
+          }} /> */}
     </div>
   )
 }
