@@ -23,8 +23,8 @@ export const updateUser = async (user: any) => {
   return response.data;
 };
 
-export const findMyCourses = async () => {
-    const { data } = await axiosWithCredentials.get(`${USERS_API}/current/courses`);
+export const findMyCourses = async (user: any) => {
+    const { data } = await axiosWithCredentials.get(`${USERS_API}/${user._id}/courses`);
     return data;
 };
 
