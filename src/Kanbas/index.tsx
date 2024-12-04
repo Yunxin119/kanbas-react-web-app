@@ -12,18 +12,19 @@ import { Provider, useSelector } from "react-redux"
 import store from "./store"
 import Session from "./Account/Session";
 import * as userClient from "./Account/client";
-import * as client from "./Courses/client"
+
 export default function Kanbas() {
   const [courses, setCourses] = useState<any[]>([]);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const fetchCourses = async () => {
     try {
-      const courses = await userClient.findMyCourses();
+      const courses = await courseClient.fetchAllCourses();
       setCourses(courses);
     } catch (error) {
       console.error(error);
     }
   };
+ 
 
   const refreshCourses = () => {
     fetchCourses();
@@ -43,15 +44,15 @@ export default function Kanbas() {
     });
 
     const addNewCourse = async () => {
-      const newCourse = await userClient.createCourse(course);
-      setCourses([ ...courses, newCourse ]);
-    };  
+      const newCourse = await courseClient.createCourse(course);
+      setCourses([...courses, newCourse]);
+    };
+   
   
     const deleteCourse = async (courseId: string) => {
       const status = await courseClient.deleteCourse(courseId);
       setCourses(courses.filter((course) => course._id !== courseId));
     };
-  
   
     const updateCourse = async () => {
       await courseClient.updateCourse(course);
