@@ -10,12 +10,13 @@ export default function Users() {
     const [role, setRole] = useState("");
     const [name, setName] = useState("");
     const createUser = async () => {
+      const loginIdValue = Date.now();
         const user = await client.createUser({
           firstName: "New",
           lastName: `User${users.length + 1}`,
           username: `newuser${Date.now()}`,
           password: "password123",
-          loginId: `00${1234561+users.length}S`,
+          loginId: `${loginIdValue}S`,
           email: `email${users.length + 1}@neu.edu`,
           section: "S101",
           role: "STUDENT",
